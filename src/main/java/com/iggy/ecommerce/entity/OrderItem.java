@@ -1,9 +1,10 @@
 package com.iggy.ecommerce.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name ="order_items")
+@Table(name = "order_items")
 public class OrderItem {
 
     @Id
@@ -11,28 +12,37 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(nullable = false)
     private Integer quantity;
-    private Double price;
 
-    public Long getId() {return id;}
-    public void setId(Long id) {this.id = id;}
+    @Column(name = "price_at_time", nullable = false, precision = 10, scale = 2)
+    private BigDecimal priceAtTime;
 
-    public Order getOrder() {return order;}
-    public void setOrder(Order order) {this.order = order;}
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Product getProduct() {return product;}
-    public void setProduct(Product product) {this.product = product;}
+    public Order getOrder() { return order; }
+    public void setOrder(Order order) { this.order = order; }
 
-    public Integer getQuantity() {return quantity;}
-    public void setQuantity(Integer quantity) {this.quantity = quantity;}
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
 
-    public Double getPrice() {return price;}
-    public void setPrice(Double price) {this.price = price;}
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    public BigDecimal getPriceAtTime() { return priceAtTime; }
+    public void setPriceAtTime(BigDecimal priceAtTime) { this.priceAtTime = priceAtTime; }
+
+    // Convenience
+    public BigDecimal getSubtotal() {
+        return priceAtTime.multiply(BigDecimal.valueOf(quantity));
+    }
 }
