@@ -41,7 +41,6 @@ public class CartItem {
     public BigDecimal getPriceAtTime() { return priceAtTime; }
     public void setPriceAtTime(BigDecimal priceAtTime) { this.priceAtTime = priceAtTime; }
 
-    // Convenience method
     public BigDecimal getSubtotal() {
         return priceAtTime.multiply(BigDecimal.valueOf(quantity));
     }
