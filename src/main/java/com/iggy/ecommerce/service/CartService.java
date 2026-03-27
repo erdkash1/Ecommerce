@@ -40,7 +40,8 @@ public class CartService {
     public Cart addItemToCart(Long userId, Long productId, Integer quantity){
         Cart cart = getCartByUserId(userId);
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));        if (!product.isInStock()) {
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        if (!product.isInStock()) {
             throw new RuntimeException("Product is out of stock");
         }
         CartItem cartItem = new CartItem();
