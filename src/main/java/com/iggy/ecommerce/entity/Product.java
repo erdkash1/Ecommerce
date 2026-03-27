@@ -52,6 +52,5 @@ public class Product {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    // Convenience method
     public boolean isInStock() { return stock != null && stock > 0; }
 }

@@ -1,5 +1,6 @@
 package com.iggy.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -11,6 +12,7 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
@@ -25,7 +27,7 @@ public class OrderItem {
     @Column(name = "price_at_time", nullable = false, precision = 10, scale = 2)
     private BigDecimal priceAtTime;
 
-    // Getters & Setters
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -41,7 +43,6 @@ public class OrderItem {
     public BigDecimal getPriceAtTime() { return priceAtTime; }
     public void setPriceAtTime(BigDecimal priceAtTime) { this.priceAtTime = priceAtTime; }
 
-    // Convenience
     public BigDecimal getSubtotal() {
         return priceAtTime.multiply(BigDecimal.valueOf(quantity));
     }
