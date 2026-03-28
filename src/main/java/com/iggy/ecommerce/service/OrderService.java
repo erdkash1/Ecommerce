@@ -1,6 +1,8 @@
 package com.iggy.ecommerce.service;
 
 import com.iggy.ecommerce.entity.*;
+import com.iggy.ecommerce.exception.BadRequestException;
+import com.iggy.ecommerce.exception.ResourceNotFoundException;
 import com.iggy.ecommerce.repository.CartRepository;
 import com.iggy.ecommerce.repository.OrderRepository;
 import com.iggy.ecommerce.repository.ProductRepository;
@@ -27,12 +29,12 @@ public class OrderService {
     }
 
     public Order placeOrder(Long userId) {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not Found"));
-            Cart cart = cartRepository.findByUserId(userId)
-                    .orElseThrow(() -> new RuntimeException("Cart not Found"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
             if (cart.getItems().isEmpty()) {
-                throw new RuntimeException("Cart is empty");
+                throw new BadRequestException("Cart is empty");
             }
             Order order = new Order();
             order.setUser(user);
@@ -60,14 +62,14 @@ public class OrderService {
 
     public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
 
 
 
     public Order updateOrderStatus(Long orderId, OrderStatus status) {
         Order existing = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         existing.setStatus(status);
         return orderRepository.save(existing);
 

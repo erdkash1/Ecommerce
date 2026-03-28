@@ -1,6 +1,7 @@
 package com.iggy.ecommerce.service;
 
 import com.iggy.ecommerce.entity.Product;
+import com.iggy.ecommerce.exception.ResourceNotFoundException;
 import com.iggy.ecommerce.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class ProductService {
     public Product createProduct(Product product){ return productRepository.save(product);}
     public Product updateProduct(Long id, Product product) {
         Product existing = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         existing.setName(product.getName());
         existing.setDescription(product.getDescription());
         existing.setPrice(product.getPrice());
