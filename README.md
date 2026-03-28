@@ -119,12 +119,16 @@ Authorization: Bearer your_token_here
 ## Example Requests
 
 ### Register
-```json
+**Request:**
+```
 POST /auth/register
+```
+**Body:**
+```json
 {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123"
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
 }
 ```
 
