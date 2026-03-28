@@ -1,9 +1,10 @@
 # E-Commerce Back-End API
 
-A RESTful e-commerce back-end API built with Spring Boot. 
-This project was built as a portfolio project to demonstrate
-real-world back-end development skills 
-including authentication, authorization, and business logic.
+A RESTful e-commerce back-end API built with Spring Boot. This project was built as a portfolio project to demonstrate real-world back-end development skills including authentication, authorization, and business logic.
+
+## Live Demo
+
+Base URL: `https://ecommerce-production-0b9e.up.railway.app`
 
 ## Tech Stack
 
@@ -70,7 +71,7 @@ jwt.expiration=86400000
 ./mvnw spring-boot:run
 ```
 
-The API will start on `http://localhost:8081`
+The API will start on `http://localhost:8080`
 
 ## Authentication
 
@@ -119,34 +120,38 @@ Authorization: Bearer your_token_here
 ## Example Requests
 
 ### Register
-**Request:**
-```
-POST /auth/register
-```
-**Body:**
+**POST** `https://ecommerce-production-0b9e.up.railway.app/auth/register`
 ```json
 {
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123"
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "password123"
+}
+```
+
+### Login
+**POST** `https://ecommerce-production-0b9e.up.railway.app/auth/login`
+```json
+{
+    "email": "john@example.com",
+    "password": "password123"
 }
 ```
 
 ### Add item to cart
 ```
-POST /carts/1/items?productId=1&quantity=2
+POST https://ecommerce-production-0b9e.up.railway.app/carts/1/items?productId=1&quantity=2
 Authorization: Bearer your_token_here
 ```
 
 ### Place an order
 ```
-POST /orders/1
+POST https://ecommerce-production-0b9e.up.railway.app/orders/1
 Authorization: Bearer your_token_here
 ```
 
 ## Author
 
-Erdenesuren Shirmen — Senior Computer Science Student  
+Erdenesuren Shirmen — Senior Computer Science Student
 GitHub: [@erdkash1](https://github.com/erdkash1)
 ```
-
