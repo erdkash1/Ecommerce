@@ -14,6 +14,8 @@ Base URL: `https://ecommerce-production-0b9e.up.railway.app`
 - **Spring Data JPA + Hibernate** for database access
 - **PostgreSQL** for the database
 - **Maven** for dependency management
+- **Docker** for containerization
+- **Deployed on Railway**
 
 ## Features
 
@@ -24,8 +26,10 @@ Base URL: `https://ecommerce-production-0b9e.up.railway.app`
 - Order placement from cart with automatic total calculation
 - Order status tracking (PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED)
 - Proper error handling with meaningful HTTP status codes
+- Fully Dockerized with Docker Compose
 
 ## Project Structure
+
 ```
 src/main/java/com/iggy/ecommerce/
 ├── controller/       # REST API endpoints
@@ -43,8 +47,19 @@ src/main/java/com/iggy/ecommerce/
 - Java 21
 - PostgreSQL
 - Maven
+- Docker (optional)
 
-### Setup
+### Option 1 — Run with Docker (Recommended)
+
+Make sure Docker is installed, then run:
+
+```bash
+docker compose up
+```
+
+The API will start on `http://localhost:8080` — no need to install PostgreSQL separately!
+
+### Option 2 — Run Locally without Docker
 
 1. Clone the repository
 ```bash
@@ -129,15 +144,6 @@ Authorization: Bearer your_token_here
 }
 ```
 
-### Login
-**POST** `https://ecommerce-production-0b9e.up.railway.app/auth/login`
-```json
-{
-    "email": "john@example.com",
-    "password": "password123"
-}
-```
-
 ### Add item to cart
 ```
 POST https://ecommerce-production-0b9e.up.railway.app/carts/1/items?productId=1&quantity=2
@@ -154,4 +160,3 @@ Authorization: Bearer your_token_here
 
 Erdenesuren Shirmen — Senior Computer Science Student
 GitHub: [@erdkash1](https://github.com/erdkash1)
-```
