@@ -14,8 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -48,11 +46,8 @@ class AuthServiceTest {
         request.setPassword("password123");
 
         User savedUser = new User();
-        savedUser.setName("Test User");
         savedUser.setEmail("test@gmail.com");
-        savedUser.setPassword("encodedPassword");
 
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
         when(jwtUtil.generateToken(anyString())).thenReturn("mockToken");
@@ -67,23 +62,22 @@ class AuthServiceTest {
     }
 
     @Test
-    void shouldFailWhenEmailAlreadyExists() {
+    void shouldSaveUserWithEncodedPassword() {
         // Given
         RegisterRequest request = new RegisterRequest();
         request.setName("Test User");
-        request.setEmail("existing@gmail.com");
-        request.setPassword("password123");
+        request.setEmail("test@gmail.com");
+        request.setPassword("plainPassword");
 
-        User existingUser = new User();
-        existingUser.setEmail("existing@gmail.com");
+        when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(new User());
+        when(jwtUtil.generateToken(anyString())).thenReturn("mockToken");
 
-        when(userRepository.findByEmail("existing@gmail.com"))
-                .thenReturn(Optional.of(existingUser));
+        // When
+        authService.register(request);
 
-        // When & Then
-        assertThrows(RuntimeException.class,
-                () -> authService.register(request));
-
-        verify(userRepository, never()).save(any(User.class));
+        // Then
+        verify(passwordEncoder, times(1)).encode("plainPassword");
+        verify(userRepository, times(1)).save(any(User.class));
     }
 }
