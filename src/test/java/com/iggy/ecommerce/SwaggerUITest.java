@@ -39,13 +39,10 @@ class SwaggerUITest {
 
     @Test
     void shouldLoadSwaggerUISuccessfully() {
-        // Navigate to Swagger UI
         driver.get(BASE_URL);
 
-        // Wait for page title to contain "Swagger"
         wait.until(ExpectedConditions.titleContains("Swagger"));
 
-        // Assert page title
         String title = driver.getTitle();
         assertTrue(title.contains("Swagger"),
                 "Page title should contain Swagger but was: " + title);
@@ -55,11 +52,9 @@ class SwaggerUITest {
     void shouldDisplayApiEndpoints() {
         driver.get(BASE_URL);
 
-        // Wait for Swagger UI to load
         wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector(".swagger-ui")));
 
-        // Check Swagger UI container is present
         WebElement swaggerUI = driver.findElement(By.cssSelector(".swagger-ui"));
         assertNotNull(swaggerUI);
         assertTrue(swaggerUI.isDisplayed());
@@ -69,21 +64,16 @@ class SwaggerUITest {
     void shouldDisplayAuthEndpoints() {
         driver.get(BASE_URL);
 
-        // Wait longer for Render free tier to wake up
-        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(90));
 
-        // Wait for page title first
         longWait.until(ExpectedConditions.titleContains("Swagger"));
 
-        // Wait for any operation tag to appear (auth, products, etc)
         longWait.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector(".opblock-tag")));
 
-        // Get all operation tags
         java.util.List<WebElement> tags = driver.findElements(
                 By.cssSelector(".opblock-tag"));
 
-        // Assert at least one endpoint group exists
         assertFalse(tags.isEmpty(), "Should have at least one API endpoint group");
         assertTrue(tags.size() >= 1, "Should display API endpoints");
     }
@@ -93,29 +83,22 @@ class SwaggerUITest {
 
         WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(60));
 
-        // Wait for page to load
         longWait.until(ExpectedConditions.titleContains("Swagger"));
 
-        // Wait for endpoint blocks to appear
         longWait.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector(".opblock")));
 
-        // Find all POST endpoints
         java.util.List<WebElement> postEndpoints = driver.findElements(
                 By.cssSelector(".opblock-post"));
 
-        // Assert POST endpoints exist
         assertFalse(postEndpoints.isEmpty(),
                 "Should have at least one POST endpoint");
 
-        // Click the first POST endpoint to expand it
         postEndpoints.get(0).click();
 
-        // Wait for expanded content
         longWait.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector(".opblock-body")));
 
-        // Assert endpoint body is now visible
         WebElement endpointBody = driver.findElement(By.cssSelector(".opblock-body"));
         assertTrue(endpointBody.isDisplayed(),
                 "Endpoint body should be visible after clicking");
@@ -127,14 +110,11 @@ class SwaggerUITest {
 
         WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(60));
 
-        // Wait for page to load
         longWait.until(ExpectedConditions.titleContains("Swagger"));
 
-        // Wait for endpoints to appear
         longWait.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector(".opblock")));
 
-        // Count different HTTP methods
         java.util.List<WebElement> getEndpoints = driver.findElements(
                 By.cssSelector(".opblock-get"));
         java.util.List<WebElement> postEndpoints = driver.findElements(
@@ -144,7 +124,6 @@ class SwaggerUITest {
         java.util.List<WebElement> putEndpoints = driver.findElements(
                 By.cssSelector(".opblock-put"));
 
-        // Assert we have multiple HTTP methods
         int totalEndpoints = getEndpoints.size() + postEndpoints.size() +
                 deleteEndpoints.size() + putEndpoints.size();
 
@@ -156,4 +135,86 @@ class SwaggerUITest {
         System.out.println("PUT endpoints: " + putEndpoints.size());
         System.out.println("Total endpoints: " + totalEndpoints);
     }
+    @Test
+    void shouldHaveAtLeastTenEndpoints() {
+       driver.get(BASE_URL);
+        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(60));
+
+        longWait.until(ExpectedConditions.titleContains("Swagger"));
+
+        longWait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector(".opblock")));
+
+        java.util.List<WebElement> endpoints = driver.findElements(
+                By.cssSelector(".opblock"));
+
+        assertTrue(endpoints.size() >= 10,
+                "Should have at least 10 endpoints but found: " + endpoints.size());
+    }
+
+    @Test
+    void shouldDisplayProductsEndpoints() {
+        driver.get(BASE_URL);
+
+        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(60));
+
+        longWait.until(ExpectedConditions.titleContains("Swagger"));
+
+        longWait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector(".opblock-tag")));
+
+        java.util.List<WebElement> endpoints = driver.findElements(
+                By.cssSelector(".opblock-tag"));
+
+        boolean hasProductEndpoint = endpoints.stream()
+                .anyMatch(e -> e.getText().toLowerCase().contains("product"));
+
+        assertTrue(hasProductEndpoint,
+                "Should display products endpoints");
+    }
+
+    @Test
+    void shouldExecuteRegisterEndpoint() {
+        driver.get(BASE_URL);
+
+        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(60));
+
+        longWait.until(ExpectedConditions.titleContains("Swagger"));
+
+        longWait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector(".opblock-post")));
+
+        java.util.List<WebElement> postEndpoints = driver.findElements(
+                By.cssSelector(".opblock-post"));
+
+        postEndpoints.get(0).click();
+
+        longWait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector(".try-out__btn")));
+
+        driver.findElement(By.cssSelector(".try-out__btn")).click();
+
+        longWait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector(".body-param__text")));
+
+        WebElement textarea = driver.findElement(By.cssSelector(".body-param__text"));
+        textarea.clear();
+        textarea.sendKeys("{\"name\": \"Test User\", \"email\": \"selenium@test.com\", \"password\": \"password123\"}");
+
+        longWait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector(".execute")));
+
+        driver.findElement(By.cssSelector(".execute")).click();
+
+        longWait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector(".responses-inner")));
+
+        WebElement response = driver.findElement(By.cssSelector(".responses-inner"));
+
+        assertNotNull(response);
+        assertTrue(response.isDisplayed(),
+                "Response should be displayed after executing register endpoint");
+    }
+
+
 }
