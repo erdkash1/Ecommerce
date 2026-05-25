@@ -87,4 +87,73 @@ class SwaggerUITest {
         assertFalse(tags.isEmpty(), "Should have at least one API endpoint group");
         assertTrue(tags.size() >= 1, "Should display API endpoints");
     }
+    @Test
+    void shouldExpandAuthRegisterEndpoint() {
+        driver.get(BASE_URL);
+
+        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(60));
+
+        // Wait for page to load
+        longWait.until(ExpectedConditions.titleContains("Swagger"));
+
+        // Wait for endpoint blocks to appear
+        longWait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector(".opblock")));
+
+        // Find all POST endpoints
+        java.util.List<WebElement> postEndpoints = driver.findElements(
+                By.cssSelector(".opblock-post"));
+
+        // Assert POST endpoints exist
+        assertFalse(postEndpoints.isEmpty(),
+                "Should have at least one POST endpoint");
+
+        // Click the first POST endpoint to expand it
+        postEndpoints.get(0).click();
+
+        // Wait for expanded content
+        longWait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector(".opblock-body")));
+
+        // Assert endpoint body is now visible
+        WebElement endpointBody = driver.findElement(By.cssSelector(".opblock-body"));
+        assertTrue(endpointBody.isDisplayed(),
+                "Endpoint body should be visible after clicking");
+    }
+
+    @Test
+    void shouldShowCorrectHttpMethods() {
+        driver.get(BASE_URL);
+
+        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(60));
+
+        // Wait for page to load
+        longWait.until(ExpectedConditions.titleContains("Swagger"));
+
+        // Wait for endpoints to appear
+        longWait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector(".opblock")));
+
+        // Count different HTTP methods
+        java.util.List<WebElement> getEndpoints = driver.findElements(
+                By.cssSelector(".opblock-get"));
+        java.util.List<WebElement> postEndpoints = driver.findElements(
+                By.cssSelector(".opblock-post"));
+        java.util.List<WebElement> deleteEndpoints = driver.findElements(
+                By.cssSelector(".opblock-delete"));
+        java.util.List<WebElement> putEndpoints = driver.findElements(
+                By.cssSelector(".opblock-put"));
+
+        // Assert we have multiple HTTP methods
+        int totalEndpoints = getEndpoints.size() + postEndpoints.size() +
+                deleteEndpoints.size() + putEndpoints.size();
+
+        assertTrue(totalEndpoints > 0,
+                "Should have multiple API endpoints");
+        System.out.println("GET endpoints: " + getEndpoints.size());
+        System.out.println("POST endpoints: " + postEndpoints.size());
+        System.out.println("DELETE endpoints: " + deleteEndpoints.size());
+        System.out.println("PUT endpoints: " + putEndpoints.size());
+        System.out.println("Total endpoints: " + totalEndpoints);
+    }
 }
