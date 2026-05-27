@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
