@@ -12,7 +12,7 @@ A production-ready RESTful e-commerce API built with Java and Spring Boot, featu
 
 ## Live Demo
 
-**Base URL:** `https://ecommerce-production-0b9e.up.railway.app`
+**Base URL:** `https://ecommerce-api-e24i.onrender.com`
 
 > The API is live and fully operational. Use the endpoints below with a tool like Postman to explore the functionality.
  
