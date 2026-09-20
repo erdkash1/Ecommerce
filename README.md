@@ -12,7 +12,7 @@ A production-ready RESTful e-commerce API built with Java and Spring Boot, featu
 
 ## Live Demo
 
-**Base URL:** `https://ecommerce-production-0b9e.up.railway.app`
+**Base URL:** `https://ecommerce-api-e24i.onrender.com`
 
 > The API is live and fully operational. Use the endpoints below with a tool like Postman to explore the functionality.
  
@@ -236,10 +236,18 @@ The API returns consistent error responses across all endpoints:
  
 ---
 
+## Testing
+RestAssured API tests available in the 
+qa-automation-practice repository covering 
+full CRUD operations with JWT authentication.
+Link: github.com/erdkash1/qa-automation-practice
+
+---
+
 ## Author
 
 **Erdenesuren Shirmen**
-Senior Computer Science Student — Missouri State University (Graduating July 2026)
+CS Graduate — Missouri State University (Graduated July 2026)
 
 GitHub:(https://github.com/erdkash1)
-LinkedIn: https://linkedin.com/in/erdenesuren-shirmen-0912b425b)
+LinkedIn: https://linkedin.com/in/erdenesuren-shirmen-dev)
