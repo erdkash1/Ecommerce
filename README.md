@@ -1,115 +1,253 @@
-# 🥗 Food Rescue Optimizer
+# E-Commerce Back-End API
 
-> AI-powered food rescue logistics platform — built with Java 21, Spring Boot, Timefold constraint solver, and deployed on AWS ECS.
-The Problem
-Over 1.3 billion tons of food is wasted globally every year while millions go hungry. The gap isn't food — it's logistics. Donors don't know where to send food. Recipients don't know what's available. And no one is optimizing the routes.
+A production-ready RESTful e-commerce API built with Java and Spring Boot, featuring JWT authentication, role-based access control, and full order management. Designed and developed independently as a portfolio project to demonstrate real-world backend engineering skills.
 
-The Solution
-Food Rescue Optimizer connects food donors (restaurants, supermarkets) with recipients (food banks, shelters) and uses AI to plan the most efficient pickup and delivery routes — minimizing distance, saving fuel, and ensuring food reaches people before it spoils.
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://ecommerce-production-0b9e.up.railway.app)
+[![Java](https://img.shields.io/badge/Java-21-orange)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-green)](https://spring.io/projects/spring-boot)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-blue)](https://www.docker.com/)
+ 
+---
 
-How It Works
-Donor registers and submits available food items with quantity and expiry time
-ML model scores spoilage risk instantly based on food category, temperature, and hours until expiry
-AI optimizer assigns vehicles to pickups using constraint-based optimization
-Routes are served via REST API for downstream apps to consume
-Key Features
-🤖 AI Route Optimizer — Timefold constraint solver assigns vehicles to pickups across 3 hard constraints: vehicle capacity, time windows, and distance minimization
-🧠 ML Spoilage Scorer — logistic regression model (Smile library) predicts spoilage risk at submission time using food category, temperature, and hours until expiry
-☁️ Cloud Native — containerized with Docker, deployed on AWS ECS Fargate with RDS PostgreSQL
-🔄 CI/CD Pipeline — GitHub Actions automatically builds, tests, and redeploys on every push to main
-📋 API Documentation — Swagger/OpenAPI interactive docs with all 11 endpoints
-🗄️ Zero Schema Drift — versioned Flyway migrations ensure identical database state from local to production
-✅ Tested — unit tested with JUnit 5 and Mockito
-Benchmark — Solver Results
-Metric	Baseline (nearest-neighbor)	Timefold Solver
-Total route distance	TODO km	TODO km
-Vehicles used	TODO	TODO
-Solve time	—	TODO s
-Sample scenario: TODO donors, TODO vehicles, TODO recipients.
+## Live Demo
 
-Tech Stack
-Layer	Technology
-Language	Java 21
-Framework	Spring Boot 3.4.4
-AI Optimizer	Timefold Solver
-ML Library	Smile (Logistic Regression)
-Database	PostgreSQL + Flyway
-Containerization	Docker
-Cloud	AWS ECS Fargate + RDS
-CI/CD	GitHub Actions
-API Docs	Swagger / OpenAPI
-API Endpoints
-Method	Endpoint	Description
-POST	/api/donors	Register a food donor
-GET	/api/donors	List all donors
-GET	/api/donors/{id}	Get donor by ID
-POST	/api/donors/{id}/food-items	Submit a food item with ML scoring
-POST	/api/recipients	Register a recipient
-GET	/api/recipients	List all recipients
-GET	/api/recipients/{id}	Get recipient by ID
-POST	/api/vehicles	Add a vehicle
-GET	/api/vehicles	List all vehicles
-GET	/api/vehicles/{id}	Get vehicle by ID
-POST	/api/optimize	Run the AI route optimizer
-Live Demo
-Resource	URL
-🌐 Live API	http://3.238.51.54:8081
-📖 API Docs	http://3.238.51.54:8081/swagger-ui/index.html
-💻 GitHub	https://github.com/erdkash1/Food-Rescue-Optimizer
-Getting Started
-Prerequisites
-Java 21
-Docker + Colima (Mac) or Docker Desktop
-PostgreSQL
-Run Locally
-bash
+**Base URL:** `https://ecommerce-api-e24i.onrender.com`
 
+> The API is live and fully operational. Use the endpoints below with a tool like Postman to explore the functionality.
+ 
+---
 
-colima start
-docker compose up -d
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Language | Java 21 |
+| Framework | Spring Boot 3.5 |
+| Security | Spring Security + JWT (JJWT 0.11.5) |
+| Database | PostgreSQL |
+| ORM | Spring Data JPA + Hibernate |
+| Build Tool | Maven |
+| Containerization | Docker + Docker Compose |
+| Deployment | Railway |
+ 
+---
+
+## Features
+
+- **JWT Authentication** — Stateless authentication using signed JWT tokens with BCrypt password hashing
+- **Role-Based Access Control** — Two-tier access control with CUSTOMER and ADMIN roles protecting all sensitive endpoints
+- **Product Catalog** — Full CRUD operations with category filtering and real-time inventory tracking
+- **Shopping Cart** — Persistent cart management with add, remove, and clear operations
+- **Order Management** — Order placement from cart with automatic total calculation and price snapshot at time of purchase
+- **Order Status Tracking** — Five-stage order lifecycle: PENDING → CONFIRMED → SHIPPED → DELIVERED → CANCELLED
+- **Global Exception Handling** — Consistent error responses with meaningful HTTP status codes
+- **Dockerized** — Fully containerized with multi-stage Dockerfile and Docker Compose for one-command local setup
+---
+
+## Architecture
+
+```
+src/main/java/com/iggy/ecommerce/
+├── controller/       # REST API endpoints — handles HTTP requests and responses
+├── service/          # Business logic layer — core application logic
+├── repository/       # Data access layer — Spring Data JPA repositories
+├── entity/           # JPA entities — database table mappings
+├── dto/              # Data Transfer Objects — request and response payloads
+├── security/         # JWT filter, UserDetailsService, and SecurityConfig
+└── exception/        # Custom exceptions and GlobalExceptionHandler
+```
+
+**Database Schema — 6 Tables:**
+```
+users ──────── carts ──────── cart_items ──── products
+  │                                               │
+  └──────── orders ──────── order_items ──────────┘
+```
+ 
+---
+
+## Getting Started
+
+### Prerequisites
+- Java 21
+- Maven
+- Docker (for Option 1)
+- PostgreSQL (for Option 2)
+---
+
+### Option 1 — Run with Docker (Recommended)
+
+The easiest way to run the project locally. No need to install PostgreSQL separately.
+
+```bash
+# Clone the repository
+git clone https://github.com/erdkash1/Ecommerce.git
+cd Ecommerce
+ 
+# Build the JAR file
+./mvnw clean package -DskipTests
+ 
+# Build the Docker image
+docker build -t ecommerce-app .
+ 
+# Start the full stack (Spring Boot + PostgreSQL)
+docker compose up
+```
+
+The API will be available at `http://localhost:8080`
+ 
+---
+
+### Option 2 — Run Locally without Docker
+
+```bash
+# Clone the repository
+git clone https://github.com/erdkash1/Ecommerce.git
+cd Ecommerce
+```
+
+Create a PostgreSQL database:
+```sql
+CREATE DATABASE ecommerce_db;
+```
+
+Configure `src/main/resources/application.properties`:
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/ecommerce_db
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+jwt.secret=your_base64_encoded_secret
+jwt.expiration=86400000
+```
+
+Run the application:
+```bash
 ./mvnw spring-boot:run
-Run Tests
-bash
+```
 
+The API will be available at `http://localhost:8080`
+ 
+---
 
-./mvnw test
-Demo Data
-Once the seed migration is in place, a fresh clone loads the demo dataset automatically via Flyway — then call POST /api/optimize to watch the solver work.
+## Authentication
 
-Project Structure
+This API uses **stateless JWT authentication**. To access protected endpoints:
 
+**Step 1** — Register or login to receive a JWT token
 
-src/main/java/com/foodrescue/optimizer/
-├── controller/      # REST endpoints — Donor, FoodItem, Recipient, Vehicle, RouteOptimizer
-├── service/         # Business logic — RouteOptimizerService, SpoilageRiskScorer (ML)
-├── solver/          # Timefold constraints — FoodRescueConstraintProvider
-├── domain/          # Planning entities — RoutePlan, Route, RouteStop, Vehicle, Donor, ...
-├── repository/      # Spring Data JPA repositories
-└── exception/       # GlobalExceptionHandler
+**Step 2** — Include the token in the `Authorization` header of every subsequent request:
+```
+Authorization: Bearer your_token_here
+```
 
-src/main/resources/
-├── application.properties.example
-└── db/migration/    # Flyway — V1 init schema, V2 remaining tables, V3 spoilage fields
+Tokens expire after **24 hours** and must be refreshed by logging in again.
+ 
+---
 
+## API Reference
 
-src/main/resources/
-├── application.properties.example
-└── db/migration/    # Flyway — V1 init schema, V2 remaining tables, V3 spoilage fields
-CI/CD
-Every push to main automatically:
+### Authentication Endpoints
 
-Sets up Java 21
-Builds with mvn clean package
-Builds the Docker image and pushes it to Amazon ECR
-Triggers a new deployment of the ECS service
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|:---:|
+| POST | `/auth/register` | Register a new user account | ❌ |
+| POST | `/auth/login` | Login and receive JWT token | ❌ |
 
-Architecture
-flowchart LR
-Client -->|REST| C[Controllers<br/>Donor, FoodItem, Recipient,<br/>Vehicle, RouteOptimizer]
-C --> S[Services<br/>DonorService, FoodItemService,<br/>RecipientService, VehicleService]
-S --> ML[SpoilageRiskScorer<br/>Smile logistic regression]
-C --> Opt[RouteOptimizerService]
-Opt --> Solver[Timefold Solver<br/>FoodRescueConstraintProvider]
-Solver --> Plan[RoutePlan]
-S --> DB[(PostgreSQL<br/>Flyway migrations)]
-Opt --> DB
+### Product Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|:---:|
+| GET | `/products` | Retrieve all products | ✅ |
+| GET | `/products/{id}` | Retrieve product by ID | ✅ |
+| GET | `/products/category/{category}` | Filter products by category | ✅ |
+| POST | `/products` | Create a new product | 🔒 Admin |
+| PUT | `/products/{id}` | Update an existing product | 🔒 Admin |
+| DELETE | `/products/{id}` | Delete a product | 🔒 Admin |
+
+### Cart Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|:---:|
+| GET | `/carts/{userId}` | Retrieve user's cart | ✅ |
+| POST | `/carts/{userId}/items` | Add item to cart | ✅ |
+| DELETE | `/carts/{userId}/items/{cartItemId}` | Remove item from cart | ✅ |
+| DELETE | `/carts/{cartId}/clear` | Clear entire cart | ✅ |
+
+### Order Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|:---:|
+| POST | `/orders/{userId}` | Place order from cart | ✅ |
+| GET | `/orders/user/{userId}` | Get all orders for a user | ✅ |
+| GET | `/orders/{orderId}` | Get order by ID | ✅ |
+| PUT | `/orders/{orderId}/status` | Update order status | 🔒 Admin |
+ 
+---
+
+## Example Requests
+
+### Register a New User
+```http
+POST https://ecommerce-production-0b9e.up.railway.app/auth/register
+Content-Type: application/json
+ 
+{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "password123"
+}
+```
+
+**Response:**
+```json
+{
+    "token": "eyJhbGciOiJIUzM4NCJ9..."
+}
+```
+
+### Add Item to Cart
+```http
+POST https://ecommerce-production-0b9e.up.railway.app/carts/1/items?productId=1&quantity=2
+Authorization: Bearer your_token_here
+```
+
+### Place an Order
+```http
+POST https://ecommerce-production-0b9e.up.railway.app/orders/1
+Authorization: Bearer your_token_here
+```
+ 
+---
+
+## Error Handling
+
+The API returns consistent error responses across all endpoints:
+
+| HTTP Status | Meaning |
+|---|---|
+| 200 OK | Request successful |
+| 201 Created | Resource created successfully |
+| 400 Bad Request | Invalid input or business rule violation |
+| 401 Unauthorized | Missing or invalid JWT token |
+| 403 Forbidden | Insufficient role permissions |
+| 404 Not Found | Requested resource does not exist |
+| 500 Internal Server Error | Unexpected server error |
+ 
+---
+
+## Testing
+RestAssured API tests available in the 
+qa-automation-practice repository covering 
+full CRUD operations with JWT authentication.
+Link: github.com/erdkash1/qa-automation-practice
+
+---
+
+## Author
+
+**Erdenesuren Shirmen**
+CS Graduate — Missouri State University (Graduated July 2026)
+
+GitHub:(https://github.com/erdkash1)
+LinkedIn: https://linkedin.com/in/erdenesuren-shirmen-dev)
